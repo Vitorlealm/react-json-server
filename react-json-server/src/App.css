@@ -149,3 +149,140 @@
   background-color: #d6f5d6;
   color: #2e7d32;
 }
+
+.tarefa-acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid #eee;
+}
+
+.botao-acao {
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #f7f7f7;
+  color: #333;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.botao-acao:hover {
+  background-color: #eee;
+}
+
+.botao-perigo {
+  border-color: #f0b4b4;
+  background-color: #ffe0e0;
+  color: #cc0000;
+}
+
+.botao-perigo:hover {
+  background-color: #ffd0d0;
+}
+
+.botao-secundario {
+  border: 1px solid #ccc;
+  background-color: #f7f7f7;
+  color: #333;
+}
+
+.botao-secundario:hover {
+  background-color: #eee;
+}
+
+.modal-overlay {
+  position: fixed;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  z-index: 1000;
+}
+
+.modal-conteudo {
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 20px;
+  width: 100%;
+  max-width: 480px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+.modal-cabecalho {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.modal-cabecalho h2 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.modal-fechar {
+  border: none;
+  background: none;
+  font-size: 18px;
+  line-height: 1;
+  color: #888;
+  cursor: pointer;
+}
+
+.modal-fechar:hover {
+  color: #333;
+}
+
+.modal-texto {
+  font-size: 14px;
+  color: #444;
+}
+
+.modal-conteudo .tarefa-form {
+  border: none;
+  padding: 0;
+  margin-bottom: 0;
+}
+
+.form-acoes {
+  display: flex;
+  gap: 8px;
+}
+
+.form-acoes button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  background-color: #4caf50;
+  color: #fff;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.form-acoes button:hover {
+  background-color: #449d48;
+}
+
+.form-acoes .botao-secundario {
+  border: 1px solid #ccc;
+  background-color: #f7f7f7;
+  color: #333;
+}
+
+.form-acoes .botao-secundario:hover {
+  background-color: #eee;
+}
+
+.form-acoes .botao-perigo {
+  border: 1px solid #f0b4b4;
+  background-color: #ffe0e0;
+  color: #cc0000;
+}
+
+.form-acoes .botao-perigo:hover {
+  background-color: #ffd0d0;
+}

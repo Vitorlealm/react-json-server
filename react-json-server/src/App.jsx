@@ -43,6 +43,43 @@ function App() {
     }
   }
 
+  async function atualizarTarefa(id, dados) {
+    try {
+      const res = await fetch(`${API_URL}/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(dados),
+      });
+      if (!res.ok) throw new Error("Não foi possível atualizar a tarefa.");
+
+      const atualizada = await res.json();
+      setTarefas((anteriores) =>
+        anteriores.map((t) => (t.id === id ? atualizada : t))
+      );
+      setErro(null);
+    } catch (e) {
+      console.error(e);
+      setErro(ERRO_API);
+    }
+  }
+
+  function alternarStatus(tarefa) {
+    return atualizarTarefa(tarefa.id, { concluida: !tarefa.concluida });
+  }
+
+  async function removerTarefa(id) {
+    try {
+      const res = await fetch(`${API_URL}/${id}`, { method: "DELETE" });
+      if (!res.ok) throw new Error("Não foi possível excluir a tarefa.");
+
+      setTarefas((anteriores) => anteriores.filter((t) => t.id !== id));
+      setErro(null);
+    } catch (e) {
+      console.error(e);
+      setErro(ERRO_API);
+    }
+  }
+
   return (
     <main className="app">
       <header className="app-header">
@@ -50,7 +87,7 @@ function App() {
         <p>Adicione novas tarefas e acompanhe a sua lista.</p>
       </header>
 
-      <TarefaForm onAdicionar={adicionarTarefa} />
+      <TarefaForm onEnviar={adicionarTarefa} />
 
       <section className="app-lista">
         <h2>Minhas tarefas ({tarefas.length})</h2>
@@ -60,7 +97,12 @@ function App() {
         {carregando ? (
           <p className="carregando">Carregando tarefas...</p>
         ) : (
-          <TarefaList tarefas={tarefas} />
+          <TarefaList
+            tarefas={tarefas}
+            onAtualizar={atualizarTarefa}
+            onAlternarStatus={alternarStatus}
+            onRemover={removerTarefa}
+          />
         )}
       </section>
     </main>

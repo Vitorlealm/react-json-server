@@ -1,30 +1,42 @@
 import { useState } from "react";
 
-function TarefaForm({ onAdicionar }) {
-  const [titulo, setTitulo] = useState("");
-  const [descricao, setDescricao] = useState("");
-  const [prioridade, setPrioridade] = useState("Média");
-  const [prazo, setPrazo] = useState("");
+function TarefaForm({
+  onEnviar,
+  tarefaInicial,
+  textoBotao = "Adicionar tarefa",
+  onCancelar,
+}) {
+  const editando = Boolean(tarefaInicial);
+
+  const [titulo, setTitulo] = useState(tarefaInicial?.titulo ?? "");
+  const [descricao, setDescricao] = useState(tarefaInicial?.descricao ?? "");
+  const [prioridade, setPrioridade] = useState(
+    tarefaInicial?.prioridade ?? "Média"
+  );
+  const [prazo, setPrazo] = useState(tarefaInicial?.prazo ?? "");
 
   function handleSubmit(evento) {
     evento.preventDefault();
     if (!titulo.trim()) return;
 
-    onAdicionar({
+    onEnviar({
       titulo: titulo.trim(),
       descricao: descricao.trim(),
       prioridade,
       prazo,
     });
-    setTitulo("");
-    setDescricao("");
-    setPrioridade("Média");
-    setPrazo("");
+
+    if (!editando) {
+      setTitulo("");
+      setDescricao("");
+      setPrioridade("Média");
+      setPrazo("");
+    }
   }
 
   return (
     <form className="tarefa-form" onSubmit={handleSubmit}>
-      <h2>Nova tarefa</h2>
+      {!editando && <h2>Nova tarefa</h2>}
 
       <label>
         Título
@@ -70,7 +82,18 @@ function TarefaForm({ onAdicionar }) {
         </label>
       </div>
 
-      <button type="submit">Adicionar tarefa</button>
+      <div className="form-acoes">
+        <button type="submit">{textoBotao}</button>
+        {onCancelar && (
+          <button
+            type="button"
+            className="botao-secundario"
+            onClick={onCancelar}
+          >
+            Cancelar
+          </button>
+        )}
+      </div>
     </form>
   );
 }
