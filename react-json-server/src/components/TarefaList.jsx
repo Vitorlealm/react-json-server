@@ -2,11 +2,7 @@ import { useState } from "react";
 import Modal from "./Modal";
 import TarefaForm from "./TarefaForm";
 
-const CLASSE_PRIORIDADE = {
-  Alta: "alta",
-  Média: "media",
-  Baixa: "baixa",
-};
+const CLASSE_PRIORIDADE = { Alta: "alta", Média: "media", Baixa: "baixa" };
 
 function formatarPrazo(prazo) {
   if (!prazo) return "Sem prazo";
@@ -18,68 +14,45 @@ function TarefaList({ tarefas, onAtualizar, onAlternarStatus, onRemover }) {
   const [tarefaExcluindo, setTarefaExcluindo] = useState(null);
 
   if (tarefas.length === 0) {
-    return <p className="lista-vazia">Nenhuma tarefa cadastrada ainda.</p>;
+    return <p>Nenhuma tarefa cadastrada ainda.</p>;
   }
 
   return (
     <>
-      <ul className="tarefa-lista">
-        {tarefas.map((tarefa) => (
-          <li
-            key={tarefa.id}
-            className={`tarefa-card ${tarefa.concluida ? "concluida" : ""}`}
+      {tarefas.map((tarefa) => (
+        <div
+          key={tarefa.id}
+          className={tarefa.concluida ? "card concluida" : "card"}
+        >
+          <h3>{tarefa.titulo}</h3>
+          {tarefa.descricao && <p>{tarefa.descricao}</p>}
+          <span
+            className={
+              "prioridade prioridade-" + CLASSE_PRIORIDADE[tarefa.prioridade]
+            }
           >
-            <div className="tarefa-cabecalho">
-              <h3>{tarefa.titulo}</h3>
-              <span
-                className={`badge prioridade-${CLASSE_PRIORIDADE[tarefa.prioridade] ?? "media"}`}
-              >
-                {tarefa.prioridade}
-              </span>
-            </div>
+            {tarefa.prioridade}
+          </span>
+          <p>Prazo: {formatarPrazo(tarefa.prazo)}</p>
+          <p>Status: {tarefa.concluida ? "Concluída" : "Pendente"}</p>
 
-            {tarefa.descricao && (
-              <p className="tarefa-descricao">{tarefa.descricao}</p>
-            )}
-
-            <div className="tarefa-rodape">
-              <span>prazo: {formatarPrazo(tarefa.prazo)}</span>
-              <span
-                className={`badge status ${tarefa.concluida ? "feita" : "pendente"}`}
-              >
-                {tarefa.concluida ? "Concluída" : "Pendente"}
-              </span>
-            </div>
-
-            <div className="tarefa-acoes">
-              <button
-                type="button"
-                className="botao-acao"
-                onClick={() => onAlternarStatus(tarefa)}
-              >
-                {tarefa.concluida ? "Reabrir" : "Marcar como concluída"}
-              </button>
-              <button
-                type="button"
-                className="botao-acao"
-                onClick={() => setTarefaEditando(tarefa)}
-              >
-                Editar
-              </button>
-              <button
-                type="button"
-                className="botao-acao botao-perigo"
-                onClick={() => setTarefaExcluindo(tarefa)}
-              >
-                Excluir
-              </button>
-            </div>
-          </li>
-        ))}
-      </ul>
+          <div className="acoes">
+            <button onClick={() => onAlternarStatus(tarefa)}>
+              {tarefa.concluida ? "Reabrir" : "Concluir"}
+            </button>
+            <button onClick={() => setTarefaEditando(tarefa)}>Editar</button>
+            <button
+              className="perigo"
+              onClick={() => setTarefaExcluindo(tarefa)}
+            >
+              Excluir
+            </button>
+          </div>
+        </div>
+      ))}
 
       {tarefaEditando && (
-        <Modal titulo="Editar tarefa" onFechar={() => setTarefaEditando(null)}>
+        <Modal titulo="Editar tarefa">
           <TarefaForm
             tarefaInicial={tarefaEditando}
             textoBotao="Salvar alterações"
@@ -93,14 +66,11 @@ function TarefaList({ tarefas, onAtualizar, onAlternarStatus, onRemover }) {
       )}
 
       {tarefaExcluindo && (
-        <Modal titulo="Excluir tarefa" onFechar={() => setTarefaExcluindo(null)}>
-          <p className="modal-texto">
-            Tem certeza que deseja excluir «{tarefaExcluindo.titulo}»?
-          </p>
-          <div className="form-acoes">
+        <Modal titulo="Excluir tarefa">
+          <p>Tem certeza que deseja excluir {tarefaExcluindo.titulo}?</p>
+          <div className="acoes">
             <button
-              type="button"
-              className="botao-perigo"
+              className="perigo"
               onClick={() => {
                 onRemover(tarefaExcluindo.id);
                 setTarefaExcluindo(null);
@@ -108,13 +78,7 @@ function TarefaList({ tarefas, onAtualizar, onAlternarStatus, onRemover }) {
             >
               Excluir
             </button>
-            <button
-              type="button"
-              className="botao-secundario"
-              onClick={() => setTarefaExcluindo(null)}
-            >
-              Cancelar
-            </button>
+            <button onClick={() => setTarefaExcluindo(null)}>Cancelar</button>
           </div>
         </Modal>
       )}
